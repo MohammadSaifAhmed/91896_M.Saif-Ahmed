@@ -66,8 +66,21 @@ def display():
     pass
 
 def new_task():
-    input_list = tasks["T1"].keys()
-    print(input_list)
+    input_list = list(tasks["T1"].keys())
+    
+
+    output = multenterbox("Task details", "Add Task", input_list)
+    print(output)
+    tasks.update({output[0]:{
+            "Title":output[1],
+            "Description":output[2],
+            "Assignee":output[3],
+            "Today's Ticket sold":output[4]
+
+
+
+    }})
+
 
 def update_task():
     pass
