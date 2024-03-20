@@ -66,7 +66,7 @@ def display():
     pass
 
 def new_task():
-    input_list = list(tasks["T1"].keys())
+    input_list = ["Title","Description","Assignee","Priority","Status"]
     
 
     output = multenterbox("Task details", "Add Task", input_list)
@@ -75,7 +75,10 @@ def new_task():
             "Title":output[1],
             "Description":output[2],
             "Assignee":output[3],
-            "Today's Ticket sold":output[4]
+            "Priority":output[4],
+            "Status":output[5]
+
+            
 
 
 
