@@ -44,7 +44,7 @@ tasks = {
 }
 
 team_members = {
-    "JSMd":{
+    "JSM":{
         "Name":"John Smith",
         "Email":"John@techvision.com",
         "Tasks Assigned":["T1","T2"],
@@ -67,20 +67,34 @@ def display():
 
 def new_task():
     input_list = ["Title","Description","Assignee","Priority","Status"]
-    
+    assignee_list = list(team_members.keys())
+    print(assignee_list)
+    output = []
+    output.append(f"T{len(tasks)+ 1}")
+    for i in input_list:
+        print(i)
+        if i == "Title" or i == "Descrition":
+            output.append(enterbox(f"what is the {i}?"))
+            print("ehere")
 
-    output = multenterbox("Task details", "Add Task", input_list)
+        elif i == "Assignee":
+            print("this")
+            output.append(buttonbox(f"what is the {i}?"),"Assignee",choices = assignee_list)
+
+
+
+
+
     print(output)
-    tasks.update({output[0]:{
+    if not output:
+        print("works")
+    else:
+        tasks.update({"test":{
             "Title":output[1],
             "Description":output[2],
             "Assignee":output[3],
             "Priority":output[4],
             "Status":output[5]
-
-            
-
-
 
     }})
 
