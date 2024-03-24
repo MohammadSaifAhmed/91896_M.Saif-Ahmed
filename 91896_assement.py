@@ -68,28 +68,34 @@ def display():
 def new_task():
     input_list = ["Title","Description","Assignee","Priority","Status"]
     assignee_list = list(team_members.keys())
-    print(assignee_list)
+    print(type(assignee_list))
+    status_list = ["Not started","In Progress","Blocked"]
     output = []
     output.append(f"T{len(tasks)+ 1}")
+
     for i in input_list:
         print(i)
-        if i == "Title" or i == "Descrition":
+        if i == "Title" or i == "Description":
             output.append(enterbox(f"what is the {i}?"))
-            print("ehere")
 
         elif i == "Assignee":
-            print("this")
-            output.append(buttonbox(f"what is the {i}?"),"Assignee",choices = assignee_list)
+            output.append(buttonbox(f"what is the {i}?","Assignee",assignee_list))
+
+        elif i == "Priority":
+            output.append(buttonbox(f"what is the {i}?","Assignee",["1","2","3"]))
+
+        elif i == "Status":
+            output.append(buttonbox(f"what is the {i}?","Assignee",status_list))
 
 
-
+  
 
 
     print(output)
     if not output:
         print("works")
     else:
-        tasks.update({"test":{
+        tasks.update({output[0]:{
             "Title":output[1],
             "Description":output[2],
             "Assignee":output[3],
