@@ -62,8 +62,17 @@ team_members = {
 }
 
 
-def display():
-    pass
+def display(task):
+
+    message = ''
+    
+    message += (f"""{task} :  \nTitle: {tasks[task]['Title']} \
+    \nDescription: {tasks[task]['Description']}  \
+    \nAssignee: {tasks[task]['Assignee']} \
+    \nStatus: {tasks[task]["Status"]} \n\n""")
+  
+
+    return message
 
 def new_task():
     input_list = ["Title","Description","Assignee","Priority","Status"]
@@ -104,7 +113,7 @@ def new_task():
 
     }})
 
-
+    return 1
 def update_task():
     pass
 
@@ -115,7 +124,12 @@ def report():
     pass
 
 def task_collection():
-    pass
+    message = ''
+    for i in tasks: 
+        message += display(i)
+
+    msgbox(message)
+    return 1
 
 def leave():
     pass
