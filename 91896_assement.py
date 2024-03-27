@@ -62,15 +62,20 @@ team_members = {
 }
 
 
-def display(task):
+def display(type,specific):
 
     message = ''
     
-    message += (f"""{task} :  \nTitle: {tasks[task]['Title']} \
-    \nDescription: {tasks[task]['Description']}  \
-    \nAssignee: {tasks[task]['Assignee']} \
-    \nStatus: {tasks[task]["Status"]} \n\n""")
-  
+    if type == "Task":
+        
+        message += (f"""{specific} :  \nTitle: {tasks[specific]['Title']} \
+        \nDescription: {tasks[specific]['Description']}  \
+        \nAssignee: {tasks[specific]['Assignee']} \
+        \nStatus: {tasks[specific]["Status"]} \n\n""")
+    elif type == "Team_member":
+        message += (f"""{specific} : \n Name: {team_members[specific]['Name']} \
+            \n Email : {team_members[specific]['Email']} \
+            \n Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
 
     return message
 
@@ -117,8 +122,30 @@ def new_task():
 def update_task():
     pass
 
-def search():
-    pass
+def search(type):
+    if type == "Task":
+        choices = tasks.keys()
+
+    elif type == "Team_member":
+        choices = team_members.keys()
+
+    print(choices)
+    specific_choice = choicebox(f"What {type}?", choices=choices)
+
+    return specific_choice
+
+
+
+def find():
+    
+    type = buttonbox("What is the type you want to look into?",choices  = ["Task","Team_member"])
+    choice = search(type)
+
+    message = display(type,choice)
+    msgbox(message)
+
+    return 1
+
 
 def report():
     pass
@@ -126,7 +153,7 @@ def report():
 def task_collection():
     message = ''
     for i in tasks: 
-        message += display(i)
+        message += display("Task",i)
 
     msgbox(message)
     return 1
@@ -136,13 +163,12 @@ def leave():
 
 options = {
         "New Task":new_task,
-        "search employee or task":search,
+        "Find employee or task":find,
         "Update task":update_task,
         "Generate report":report,
         "see task collection":task_collection,
         "Exit":leave,
      
-        
     }
 
 
