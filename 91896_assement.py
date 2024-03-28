@@ -80,32 +80,38 @@ def display(type,specific):
     return message
 
 def new_task():
+    task_change("new")
+
+    return 1
+
+def update_task():
+    task_change("update")
+
+
+def task_change(type):
+
     input_list = ["Title","Description","Assignee","Priority","Status"]
-    assignee_list = list(team_members.keys())
-    print(type(assignee_list))
-    status_list = ["Not started","In Progress","Blocked"]
     output = []
-    output.append(f"T{len(tasks)+ 1}")
+   
+    choices = []
 
-    for i in input_list:
-        print(i)
-        if i == "Title" or i == "Description":
-            output.append(enterbox(f"what is the {i}?"))
+    for i in tasks:
+        choices.append(tasks[i]["Title"])
+    if type == "update":
+        
+        chosen_task = choicebox("What task do you want to update?", choices = choices)
+        value = buttonbox("What do you want to change?", choices = input_list)
+        output.append(chosen_task)
+    
+        value_change(value)
 
-        elif i == "Assignee":
-            output.append(buttonbox(f"what is the {i}?","Assignee",assignee_list))
-
-        elif i == "Priority":
-            output.append(buttonbox(f"what is the {i}?","Assignee",["1","2","3"]))
-
-        elif i == "Status":
-            output.append(buttonbox(f"what is the {i}?","Assignee",status_list))
-
-
-  
+    elif type == "new":
+        output.append(f"T{len(list(tasks.keys)) + 1}")
+        for i in input_list:
+            output.append(value_change(i))
 
 
-    print(output)
+
     if not output:
         print("works")
     else:
@@ -118,9 +124,24 @@ def new_task():
 
     }})
 
-    return 1
-def update_task():
-    pass
+def value_change(i):
+    assignee_list = list(team_members.keys())
+    status_list = ["Not started","In Progress","Blocked"]
+    if i == "Title" or i == "Description":
+        return enterbox(f"what is the {i}?")
+
+    elif i == "Assignee":
+        return buttonbox(f"what is the {i}?","Assignee",assignee_list)
+
+    elif i == "Priority":
+        return buttonbox(f"what is the {i}?","Assignee",["1","2","3"])
+
+    elif i == "Status":
+        return buttonbox(f"what is the {i}?","Assignee",status_list)
+
+        
+
+
 
 def search(type):
     if type == "Task":
