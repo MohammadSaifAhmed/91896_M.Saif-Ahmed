@@ -1,5 +1,6 @@
 from easygui import *
 
+
 tasks = {
     "T1":{
         "Title":"Design Homepage",
@@ -61,7 +62,6 @@ team_members = {
     },
 }
 
-
 def display(type,specific):
 
     message = ''
@@ -80,36 +80,12 @@ def display(type,specific):
     return message
 
 def new_task():
-    task_change("new")
-
-    return 1
-
-def update_task():
-    task_change("update")
-
-
-def task_change(type):
-
     input_list = ["Title","Description","Assignee","Priority","Status"]
     output = []
-   
-    choices = []
-
-    for i in tasks:
-        choices.append(tasks[i]["Title"])
-    if type == "update":
-        
-        chosen_task = choicebox("What task do you want to update?", choices = choices)
-        value = buttonbox("What do you want to change?", choices = input_list)
-        output.append(chosen_task)
-    
-        value_change(value)
-
-    elif type == "new":
-        output.append(f"T{len(list(tasks.keys)) + 1}")
-        for i in input_list:
-            output.append(value_change(i))
-
+    task_num = len(list(tasks.keys())) + 1
+    output.append(f"T{task_num}")
+    for i in input_list:
+        output.append(value_change(i))
 
 
     if not output:
@@ -124,9 +100,29 @@ def task_change(type):
 
     }})
 
+    return 1
+
+def update_task():
+    input_list = ["Title","Description","Assignee","Priority","Status"]
+    choices = []
+
+  
+
+    chosen_task = search("Task")
+    value = buttonbox("What do you want to change?", choices = input_list)
+    task_num = f"T{choices.index(chosen_task) + 1}"
+    changed_value = value_change(value)
+
+    tasks[task_num][value] = changed_value
+
+   
+
+    return 1
+
 def value_change(i):
     assignee_list = list(team_members.keys())
-    status_list = ["Not started","In Progress","Blocked"]
+    status_list = ["Not Started","In Progress","Blocked","Completed"]
+
     if i == "Title" or i == "Description":
         return enterbox(f"what is the {i}?")
 
@@ -142,19 +138,21 @@ def value_change(i):
         
 
 
-
 def search(type):
+    choices = []
     if type == "Task":
-        choices = tasks.keys()
+            
+        for i in tasks:
+            choices.append(tasks[i]["Title"])
 
     elif type == "Team_member":
-        choices = team_members.keys()
-
+        
+        for i in team_members:
+            choices.append(team_members[i]["Name"])
     print(choices)
     specific_choice = choicebox(f"What {type}?", choices=choices)
 
     return specific_choice
-
 
 
 def find():
@@ -167,9 +165,37 @@ def find():
 
     return 1
 
-
 def report():
-    pass
+    status_list = ["Not Started","In Progress","Blocked","Completed"]
+    message = []
+
+    status_bins = {
+        "Not Started":[],
+        "In Progress" : [],
+        "Blocked" : [],
+        "Completed" : [],
+    
+    }
+
+    for i in tasks:
+        for x in status_list:
+            if tasks[i]["Status"] == x:
+                status_bins[x].append(f"{i} - {tasks[i]['Title']}")
+
+    
+    for i in status_bins:
+        message.append(f"{i} - {status_bins[i]}")
+    
+
+    final_message = '\n\n'.join(message)
+    
+    msgbox(final_message)
+
+    return 1
+
+
+
+
 
 def task_collection():
     message = ''
@@ -192,7 +218,6 @@ options = {
      
     }
 
-
 running = True
 while running:
     
@@ -209,6 +234,6 @@ while running:
     else:
         user_choice = options[selection]()
 
-
         if not user_choice:
             running = False
+
