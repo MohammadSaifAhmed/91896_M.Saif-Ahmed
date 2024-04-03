@@ -60,6 +60,13 @@ team_members = {
         "Email":"Bob@techvision.com",
         "Tasks Assigned":["T5"],
     },
+
+    "No member":{
+        "Name":"none",
+        "Email":"none",
+        "Tasks Assigned":[],
+
+    }
 }
 
 def display(type,specific):
@@ -86,7 +93,11 @@ def new_task():
     output.append(f"T{task_num}")
     for i in input_list:
         output.append(value_change(i))
-
+    print(output)
+    for details in output:
+        print(details)
+        if details == "":
+            value_change(input_list[output.index(details)-1])#check this
 
     if not output:
         print("works")
@@ -104,18 +115,14 @@ def new_task():
 
 def update_task():
     input_list = ["Title","Description","Assignee","Priority","Status"]
-    choices = []
-
-  
-
+    
     chosen_task = search("Task")
+    print(chosen_task[1])
     value = buttonbox("What do you want to change?", choices = input_list)
-    task_num = f"T{choices.index(chosen_task) + 1}"
+    task_num = f"T{chosen_task[1].index(chosen_task[0]) + 1}"
     changed_value = value_change(value)
 
     tasks[task_num][value] = changed_value
-
-   
 
     return 1
 
@@ -149,15 +156,16 @@ def search(type):
         
         for i in team_members:
             choices.append(team_members[i]["Name"])
-    print(choices)
+    
     specific_choice = choicebox(f"What {type}?", choices=choices)
 
-    return specific_choice
+    return specific_choice , choices
+    
 
 
 def find():
     
-    type = buttonbox("What is the type you want to look into?",choices  = ["Task","Team_member"])
+    type = buttonbox("What is the type you want to look into?", choices  = ["Task","Team_member"])
     choice = search(type)
 
     message = display(type,choice)
