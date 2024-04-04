@@ -70,6 +70,13 @@ team_members = {
 }
 
 def display(type,specific):
+    ''' This function is used to display a task or team members full 
+    descrition/details. The Function takes in a type parameter which 
+    tells the function wheter it needs to display a Task and or
+    team member and the specific parameter tells the function what task
+    or team memeber specfically to display. The function then creates a
+    string variable with the details of the specfic task/team member and
+    returns it. '''
 
     message = ''
     
@@ -79,7 +86,9 @@ def display(type,specific):
         \nDescription: {tasks[specific]['Description']}  \
         \nAssignee: {tasks[specific]['Assignee']} \
         \nStatus: {tasks[specific]["Status"]} \n\n""")
+
     elif type == "Team_member":
+
         message += (f"""{specific} : \n Name: {team_members[specific]['Name']} \
             \n Email : {team_members[specific]['Email']} \
             \n Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
@@ -87,18 +96,35 @@ def display(type,specific):
     return message
 
 def new_task():
+
+    '''
+    This function is run when the user wants to add a new task to the 
+    tasks dictionary. Runs through all inputs in a for loop them checks
+    if any input is empty and ask for it again 
+    
+    
+    
+    
+    
+    
+    '''
     input_list = ["Title","Description","Assignee","Priority","Status"]
     output = []
     task_num = len(list(tasks.keys())) + 1
     output.append(f"T{task_num}")
-    for i in input_list:
-        output.append(value_change(i))
-    print(output)
-    for details in output:
-        print(details)
-        if details == "":
-            value_change(input_list[output.index(details)-1])#check this
 
+    for i in input_list:
+        detail = value_change(i)
+      
+        
+        while detail == "":
+            msgbox("Cannot input empty value")
+            detail = value_change(i)#check this
+
+        
+        output.append(detail)
+
+    print(output)
     if not output:
         print("works")
     else:
