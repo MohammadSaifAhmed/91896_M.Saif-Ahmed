@@ -1,6 +1,5 @@
 from easygui import *
 
-#test 1234o432i5oi432[5]
 tasks = {
     "T1":{
         "Title":"Design Homepage",
@@ -69,6 +68,13 @@ team_members = {
     }
 }
 
+#Constant variables
+#A list of all the inputs/details of a task
+Input_list = ["Title","Description","Assignee","Priority","Status"]
+#A list of all the possible statuss for a task
+Status_list = ["Not Started","In Progress","Blocked","Completed"]
+
+
 def display(type,specific):
     ''' This function is used to display a task or team members full 
     descrition/details. The Function takes in a type parameter which 
@@ -76,85 +82,94 @@ def display(type,specific):
     team member and the specific parameter tells the function what task
     or team memeber specfically to display. The function then creates a
     string variable with the details of the specfic task/team member and
-    returns it. '''
-
+    returns it. 
+    
+    Keyword arguments:
+    type -- the dict in which the specfic item details are
+    specfic -- the specfic item in the dict of type
+    '''
+    #An empty string to which the message will be added to and then
+    #returned to where this function is called. 
     message = ''
     
+    #An if statement which appends to the message depending on if it is
+    #in the tasks dictionary or the team member dictionary.
     if type == "Task":
-        
-        message += (f"""{specific} :  \nTitle: {tasks[specific]['Title']} \
+        # A formated string that will formats all the details of the 
+        #specific task put in the parameter of the function.
+        message += (f"{specific} :  \nTitle: {tasks[specific]['Title']} \
         \nDescription: {tasks[specific]['Description']}  \
         \nAssignee: {tasks[specific]['Assignee']} \
-        \nStatus: {tasks[specific]["Status"]} \n\n""")
+        \nStatus: {tasks[specific]['Status']} \n\n")
 
     elif type == "Team_member":
-
-        message += (f"""{specific} : \n Name: {team_members[specific]['Name']} \
+        # A formated string that will formats all the details of the 
+        #specific team member put in the parameter of the function.
+        message += (f"""{specific} : \n Name: {team_members[specific]['Name']}\
             \n Email : {team_members[specific]['Email']} \
             \n Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
 
     return message
 
 def new_task():
+    ''' This function is run when the user wants to add a new task to 
+    the tasks dictionary. It runs through all inputs in a for loop then 
+    checks if any input is empty and ask for it again until all value 
+    are not empty. '''
 
-    '''
-    This function is run when the user wants to add a new task to the 
-    tasks dictionary. Runs through all inputs in a for loop them checks
-    if any input is empty and ask for it again 
+    #All the inputs the user will be asked for  vb 
     
-    
-    
-    
-    
-    
-    '''
-    input_list = ["Title","Description","Assignee","Priority","Status"]
+    #An empty list that all the new task's details get appended to.
     output = []
+    # task_num is a variable that determine the key for the new function
+    #based on he amount of tasks that already exists and adds a number 
+    #to that which then gets appened to the output list.
     task_num = len(list(tasks.keys())) + 1
     output.append(f"T{task_num}")
 
-    for i in input_list:
+    #A for loop that runs through all the inputs/details that are needed
+    #for the the new task being made and then appends it to the output 
+    #list.
+    for i in Input_list:
         detail = value_change(i)
-      
-        
+
+        #A while loop that runs while the detail variable is empty and 
+        #asks the user to re-input the empty value.
         while detail == "":
             msgbox("Cannot input empty value")
-            detail = value_change(i)#check this
-
-        
+            detail = value_change(i)
         output.append(detail)
 
-    print(output)
-    if not output:
-        print("works")
-    else:
-        tasks.update({output[0]:{
-            "Title":output[1],
-            "Description":output[2],
-            "Assignee":output[3],
-            "Priority":output[4],
-            "Status":output[5]
+    #Updates the tasks dictionary witht the new task using the output 
+    #list which has all the details.
+    tasks.update({output[0]:{
+        "Title":output[1],
+        "Description":output[2],
+        "Assignee":output[3],
+        "Priority":output[4],
+        "Status":output[5]
 
     }})
 
     return 1
 
 def update_task():
-    input_list = ["Title","Description","Assignee","Priority","Status"]
+   
     
     chosen_task = search("Task")
-    print(chosen_task[1])
-    value = buttonbox("What do you want to change?", choices = input_list)
-    task_num = f"T{chosen_task[1].index(chosen_task[0]) + 1}"
+    print(chosen_task)
+    value = buttonbox("What do you want to change?", choices = Input_list)
+    print(value)
+    
     changed_value = value_change(value)
 
-    tasks[task_num][value] = changed_value
-
+    tasks[chosen_task[0]][value] = changed_value
+    print(changed_value)
     return 1
 
 def value_change(i):
     assignee_list = list(team_members.keys())
-    status_list = ["Not Started","In Progress","Blocked","Completed"]
+    
 
     if i == "Title" or i == "Description":
         return enterbox(f"what is the {i}?")
@@ -166,41 +181,42 @@ def value_change(i):
         return buttonbox(f"what is the {i}?","Assignee",["1","2","3"])
 
     elif i == "Status":
-        return buttonbox(f"what is the {i}?","Assignee",status_list)
+        return buttonbox(f"what is the {i}?","Assignee",Status_list)
 
         
-
-
 def search(type):
     choices = []
+    
     if type == "Task":
-            
+        keys = list(tasks.keys())
         for i in tasks:
             choices.append(tasks[i]["Title"])
 
     elif type == "Team_member":
-        
+        keys = list(team_members.keys())
         for i in team_members:
             choices.append(team_members[i]["Name"])
     
-    specific_choice = choicebox(f"What {type}?", choices=choices)
+    specific_choice = choicebox(f"What {type}?", choices=choices) 
+    key = keys[choices.index(specific_choice)]
 
-    return specific_choice , choices
+    return key, specific_choice, choices
     
 
 
 def find():
     
-    type = buttonbox("What is the type you want to look into?", choices  = ["Task","Team_member"])
+    type = buttonbox("What is the type you want to look into?", \
+                     choices  = ["Task","Team_member"])
     choice = search(type)
 
-    message = display(type,choice)
+    message = display(type,choice[0])
     msgbox(message)
 
     return 1
 
 def report():
-    status_list = ["Not Started","In Progress","Blocked","Completed"]
+    
     message = []
 
     status_bins = {
@@ -212,13 +228,13 @@ def report():
     }
 
     for i in tasks:
-        for x in status_list:
+        for x in Status_list:
             if tasks[i]["Status"] == x:
                 status_bins[x].append(f"{i} - {tasks[i]['Title']}")
 
     
     for i in status_bins:
-        message.append(f"{i} - {status_bins[i]}")
+        message.append(f"{i} - {status_bins[i].replace('[]','')}")
     
 
     final_message = '\n\n'.join(message)
@@ -260,7 +276,6 @@ while running:
 
     choices = (list(options.keys()))
     
-
     selection = buttonbox(msg,title,choices)
     
     if not options.get(selection):
