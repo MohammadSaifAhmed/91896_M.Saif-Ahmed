@@ -71,8 +71,10 @@ team_members = {
 #Constant variables
 #A list of all the inputs/details of a task
 Input_list = ["Title","Description","Assignee","Priority","Status"]
-#A list of all the possible statuss for a task
+
+#A list of all the possible status for a task
 Status_list = ["Not Started","In Progress","Blocked","Completed"]
+
 
 
 def display(type,specific):
@@ -97,17 +99,17 @@ def display(type,specific):
     if type == "Task":
         # A formated string that will formats all the details of the 
         #specific task put in the parameter of the function.
-        message += (f"{specific} :  \nTitle: {tasks[specific]['Title']} \
-        \nDescription: {tasks[specific]['Description']}  \
-        \nAssignee: {tasks[specific]['Assignee']} \
-        \nStatus: {tasks[specific]['Status']} \n\n")
+        message += (f"\n{specific} :")
+        for x in Input_list:
+            message += (f"\n   {x}: {tasks[specific][x]}")
 
     elif type == "Team_member":
         # A formated string that will formats all the details of the 
         #specific team member put in the parameter of the function.
-        message += (f"""{specific} : \n Name: {team_members[specific]['Name']}\
-            \n Email : {team_members[specific]['Email']} \
-            \n Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
+        
+        message += (f"""{specific} : \n  Name: {team_members[specific]['Name']}\
+            \n   Email : {team_members[specific]['Email']} \
+            \n   Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
 
     return message
 
@@ -135,7 +137,7 @@ def new_task():
 
         #A while loop that runs while the detail variable is empty and 
         #asks the user to re-input the empty value.
-        while detail == "":
+        while not detail:
             msgbox("Cannot input empty value")
             detail = value_change(i)
         output.append(detail)
@@ -160,8 +162,14 @@ def update_task():
     print(chosen_task)
     value = buttonbox("What do you want to change?", choices = Input_list)
     print(value)
+   
+        
     
     changed_value = value_change(value)
+    print(changed_value)
+    if not changed_value:
+        return 1
+
 
     tasks[chosen_task[0]][value] = changed_value
     print(changed_value)
@@ -220,21 +228,21 @@ def report():
     message = []
 
     status_bins = {
-        "Not Started":[],
-        "In Progress" : [],
-        "Blocked" : [],
-        "Completed" : [],
+        "Not Started": 0,
+        "In Progress" : 0,
+        "Blocked" : 0,
+        "Completed" : 0,
     
     }
 
     for i in tasks:
         for x in Status_list:
             if tasks[i]["Status"] == x:
-                status_bins[x].append(f"{i} - {tasks[i]['Title']}")
+                status_bins[x] += 1
 
     
     for i in status_bins:
-        message.append(f"{i} - {status_bins[i].replace('[]','')}")
+        message.append(f"{i} - {status_bins[i]}")
     
 
     final_message = '\n\n'.join(message)
@@ -256,7 +264,7 @@ def task_collection():
     return 1
 
 def leave():
-    pass
+    return None
 
 options = {
         "New Task":new_task,
