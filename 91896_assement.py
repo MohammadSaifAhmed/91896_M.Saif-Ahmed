@@ -116,9 +116,7 @@ def new_task():
     ''' This function is run when the user wants to add a new task to 
     the tasks dictionary. It runs through all inputs in a for loop then 
     checks if any input is empty and ask for it again until all value 
-    are not empty. '''
-
-    #All the inputs the user will be asked for  vb 
+    are not empty. ''' 
     
     #An empty list that all the new task's details get appended to.
     output = []
@@ -155,43 +153,69 @@ def new_task():
     return 1
 
 def update_task():
-   
-    
+    '''This function is run when the user wants to update a 
+    pre-existing task. It asks the user first what task then what
+    specfic detail they want to change of that the task then asks for 
+    the value and then updates that specfic value to the specfic task
+    they choose.
+    '''
+    #The task the user has picked.
     chosen_task = search("Task")
     print(chosen_task)
-    value = buttonbox("What do you want to change?", choices = Input_list)
-    print(value)
+    #The value the user wants to change.
+    detail = buttonbox("What do you want to change?", choices = Input_list)
+    print(detail)
    
         
-    
-    changed_value = value_change(value)
+    #Using the value change function the ask the user what them the new
+    #value for the detail they want to change.
+    changed_value = value_change(detail)
     print(changed_value)
+    #If they click cancel it will go back to the menu and not update the
+    #detail.
     if not changed_value:
         return 1
 
 
-    tasks[chosen_task[0]][value] = changed_value
+    tasks[chosen_task[0]][detail] = changed_value
     print(changed_value)
     return 1
 
 def value_change(i):
     assignee_list = list(team_members.keys())
+    value = ''
     
+    while not value:
+        if i == "Title" or i == "Description":
+            value = enterbox(f"what is the {i}?")
 
-    if i == "Title" or i == "Description":
-        return enterbox(f"what is the {i}?")
+        elif i == "Assignee":
+            value = buttonbox(f"what is the {i}?","Assignee",assignee_list)
 
-    elif i == "Assignee":
-        return buttonbox(f"what is the {i}?","Assignee",assignee_list)
+        elif i == "Priority":
+            value =  buttonbox(f"what is the {i}?","Assignee",["1","2","3"])
 
-    elif i == "Priority":
-        return buttonbox(f"what is the {i}?","Assignee",["1","2","3"])
-
-    elif i == "Status":
-        return buttonbox(f"what is the {i}?","Assignee",Status_list)
-
+        elif i == "Status":
+            value = buttonbox(f"what is the {i}?","Assignee",Status_list)
         
+        elif not value:
+            return None
+    return value
+
+
 def search(type):
+    '''This task take a type parameter , task or team member, then makes
+    a list of all the keys of that type then runs a for loop to figure 
+    out the the title of the task or the name of the team member then
+    outputs a choicebox according the the avaible choices of the type 
+    the user chooses in title or name form instead of keys. Then in the
+    end returns the key in which the choosen title/name is , 
+    then what the choice is title/name form and also a list of all the 
+    choices the user had to choose from.
+    
+    keyword arguments :
+    type -- The dictionary which will be searched in
+    '''
     choices = []
     
     if type == "Task":
@@ -212,7 +236,8 @@ def search(type):
 
 
 def find():
-    
+    '''This function displays the a specfic key either from the tasks
+    or team member dictionary'''
     type = buttonbox("What is the type you want to look into?", \
                      choices  = ["Task","Team_member"])
     choice = search(type)
@@ -249,9 +274,6 @@ def report():
     msgbox(final_message)
 
     return 1
-
-
-
 
 
 def task_collection():
