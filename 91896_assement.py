@@ -75,7 +75,7 @@ Input_list = ["Title","Description","Assignee","Priority","Status"]
 #A list of all the possible status for a task
 Status_list = ["Not Started","In Progress","Blocked","Completed"]
 
-
+Member_details = ["Name","Email","Tasks Assigned"]
 
 def display(type,specific):
     ''' This function is used to display a task or team members full 
@@ -93,13 +93,13 @@ def display(type,specific):
     #An empty string to which the message will be added to and then
     #returned to where this function is called. 
     message = ''
-    
+    message += (f"\n{specific} :")
     #An if statement which appends to the message depending on if it is
     #in the tasks dictionary or the team member dictionary.
     if type == "Task":
         # A formated string that will formats all the details of the 
         #specific task put in the parameter of the function.
-        message += (f"\n{specific} :")
+        
         for x in Input_list:
             message += (f"\n   {x}: {tasks[specific][x]}")
 
@@ -107,9 +107,8 @@ def display(type,specific):
         # A formated string that will formats all the details of the 
         #specific team member put in the parameter of the function.
         
-        message += (f"""{specific} : \n  Name: {team_members[specific]['Name']}\
-            \n   Email : {team_members[specific]['Email']} \
-            \n   Tasks Assigned : {team_members[specific]['Tasks Assigned']}""")
+        for details in Member_details:
+            message += (f"\n     {details}: {team_members[specific][details]}")
 
     return message
 
