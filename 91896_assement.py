@@ -80,7 +80,7 @@ Member_details = ["Name","Email","Tasks Assigned"]
 def display(type,specific):
     ''' This function is used to display a task or team members full 
     descrition/details. The Function takes in a type parameter which 
-    tells the function wheter it needs to display a Task and or
+    tells the function wheter it needs to display a Task or
     team member and the specific parameter tells the function what task
     or team memeber specfically to display. The function then creates a
     string variable with the details of the specfic task/team member and
@@ -165,7 +165,6 @@ def update_task():
     #The value the user wants to change.
     detail = buttonbox("What do you want to change?", choices = Input_list)
     print(detail)
-   
         
     #Using the value change function the ask the user what them the new
     #value for the detail they want to change.
@@ -187,7 +186,7 @@ def value_change(i):
     assignee_list = list(team_members.keys())
     value = ''
 
-    #A while loop 
+    #A while loop that runs while the value string 
     while value == '': 
 
         if i == "Title" or i == "Description":
@@ -196,7 +195,8 @@ def value_change(i):
         elif i == "Assignee":
             value = enterbox(f"Who is the assignee?","Assignee",assignee_list)
         elif i == "Priority":
-            value = integerbox(f"What is the priority?","Priority",lowerbound=1, upperbound=3)
+            value = integerbox(f"What is the priority?","Priority", \
+                               lowerbound=1, upperbound=3)
 
         elif i == "Status":
             value = buttonbox(f"what is the {i}?","Assignee",Status_list)
@@ -205,7 +205,6 @@ def value_change(i):
             msgbox("Value needs to be inputed")
    
     return value
-
 
 def search(type):
     '''This task take a type parameter , task or team member, then makes
@@ -221,7 +220,7 @@ def search(type):
     type -- The dictionary which will be searched in
     '''
     choices = []
-    #834
+    
     if type == "Task":
         keys = list(tasks.keys())
         for i in tasks:
