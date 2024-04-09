@@ -1,5 +1,5 @@
 from easygui import *
-
+# do  so when task completed then person doesnt have that in theri task list
 tasks = {
     "T1":{
         "Title":"Design Homepage",
@@ -175,31 +175,35 @@ def update_task():
     #detail.
     if not changed_value:
         return 1
-
-
+    
+    #This updates the chosen detail in the chosen task.
     tasks[chosen_task[0]][detail] = changed_value
-    print(changed_value)
+ 
     return 1
 
 def value_change(i):
+    #Makes a list of all possible assigness or the keys of the team
+    #member list.
     assignee_list = list(team_members.keys())
     value = ''
-    
-    while not value:
+
+    #A while loop 
+    while value == '': 
+
         if i == "Title" or i == "Description":
             value = enterbox(f"what is the {i}?")
 
         elif i == "Assignee":
-            value = buttonbox(f"what is the {i}?","Assignee",assignee_list)
-
+            value = enterbox(f"Who is the assignee?","Assignee",assignee_list)
         elif i == "Priority":
-            value =  buttonbox(f"what is the {i}?","Assignee",["1","2","3"])
+            value = integerbox(f"What is the priority?","Priority",lowerbound=1, upperbound=3)
 
         elif i == "Status":
             value = buttonbox(f"what is the {i}?","Assignee",Status_list)
-        
-        elif not value:
-            return None
+    
+        if value == '':
+            msgbox("Value needs to be inputed")
+   
     return value
 
 
@@ -217,7 +221,7 @@ def search(type):
     type -- The dictionary which will be searched in
     '''
     choices = []
-    
+    #834
     if type == "Task":
         keys = list(tasks.keys())
         for i in tasks:
