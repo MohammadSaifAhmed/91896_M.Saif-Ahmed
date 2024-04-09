@@ -1,5 +1,7 @@
 from easygui import *
 # do  so when task completed then person doesnt have that in theri task list
+#do the completed check thing
+
 tasks = {
     "T1":{
         "Title":"Design Homepage",
