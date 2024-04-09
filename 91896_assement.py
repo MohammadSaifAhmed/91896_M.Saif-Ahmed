@@ -173,7 +173,7 @@ def update_task():
     #If they click cancel it will go back to the menu and not update the
     #detail.
     if not changed_value:
-        return 1
+        return 
     
     #This updates the chosen detail in the chosen task.
     tasks[chosen_task[0]][detail] = changed_value
@@ -197,12 +197,15 @@ def value_change(i):
         elif i == "Priority":
             value = integerbox(f"What is the priority?","Priority", \
                                lowerbound=1, upperbound=3)
-
         elif i == "Status":
             value = buttonbox(f"what is the {i}?","Assignee",Status_list)
-    
-        if value == '':
+
+        if not value or not i:
+            return 1
+        elif value == '':
             msgbox("Value needs to be inputed")
+            pass
+        
    
     return value
 
@@ -232,6 +235,10 @@ def search(type):
             choices.append(team_members[i]["Name"])
     
     specific_choice = choicebox(f"What {type}?", choices=choices) 
+    print(specific_choice)
+
+    if not specific_choice:
+        return 1
     key = keys[choices.index(specific_choice)]
 
     return key, specific_choice, choices
