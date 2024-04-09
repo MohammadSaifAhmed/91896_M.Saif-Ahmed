@@ -174,7 +174,7 @@ def update_task():
     #If they click cancel it will go back to the menu and not update the
     #detail.
     if not changed_value:
-        return 
+        return 1
     
     #This updates the chosen detail in the chosen task.
     tasks[chosen_task[0]][detail] = changed_value
@@ -182,10 +182,12 @@ def update_task():
     if detail == 'Status' and changed_value == 'Completed':
         assignee = tasks[chosen_task[0]]['Assignee']  
         print("Assignee: " + assignee)
-        team_members[assignee]["Tasks Assigned"].remove(chosen_task[0])
-        tasks[chosen_task[0]]['Asignee'].remove(assignee)
-        
- 
+        if assignee is not None:
+            team_members[assignee]["Tasks Assigned"].remove(chosen_task[0])
+            tasks[chosen_task[0]]['Assignee'] == None
+            
+        else:
+            pass
     return 1
 
 def value_change(i):
