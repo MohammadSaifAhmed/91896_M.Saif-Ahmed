@@ -135,8 +135,7 @@ def new_task():
         #A while loop that runs while the detail variable is empty and 
         #asks the user to re-input the empty value.
         while not detail:
-            msgbox("Cannot input empty value")
-            detail = value_change(i)
+            return 1
         output.append(detail)
 
     #Updates the tasks dictionary witht the new task using the output 
@@ -177,6 +176,13 @@ def update_task():
     
     #This updates the chosen detail in the chosen task.
     tasks[chosen_task[0]][detail] = changed_value
+
+    if detail == 'Status' and changed_value == 'Completed':
+        assignee = tasks[chosen_task[0]]['Assignee']  
+        print("Assignee: " + assignee)
+        team_members[assignee]["Tasks Assigned"].remove(chosen_task[0])
+        tasks[chosen_task[0]]['Asignee'].remove(assignee)
+        
  
     return 1
 
@@ -193,7 +199,7 @@ def value_change(i):
             value = enterbox(f"what is the {i}?")
 
         elif i == "Assignee":
-            value = enterbox(f"Who is the assignee?","Assignee",assignee_list)
+            value = buttonbox(f"Who is the assignee?","Assignee",assignee_list)
         elif i == "Priority":
             value = integerbox(f"What is the priority?","Priority", \
                                lowerbound=1, upperbound=3)
@@ -203,6 +209,9 @@ def value_change(i):
     
         if value == '':
             msgbox("Value needs to be inputed")
+
+        elif not value:
+            print(value)
    
     return value
 
@@ -232,6 +241,8 @@ def search(type):
             choices.append(team_members[i]["Name"])
     
     specific_choice = choicebox(f"What {type}?", choices=choices) 
+    if not specific_choice:
+        return 1
     key = keys[choices.index(specific_choice)]
 
     return key, specific_choice, choices
