@@ -109,6 +109,7 @@ def display(type,specific):
 
     return message
 
+
 def assignee_adjust(attribute,value,task):
      if attribute == 'Status' and value == 'Completed':
         assignee = tasks[task]['Assignee']  
@@ -120,6 +121,7 @@ def assignee_adjust(attribute,value,task):
             
         else:
             pass
+
 
 def new_task():
     ''' This function is run when the user wants to add a new task to 
@@ -140,10 +142,10 @@ def new_task():
     #list.
     for attribute in Input_list:
         detail = value_change(attribute)
-
+        print(detail)
         #A while loop that runs while the detail variable is empty and 
         #asks the user to re-input the empty value.
-        while detail == 1:
+        if detail == 1:
             return 1
         output.append(detail)
 
@@ -162,6 +164,7 @@ def new_task():
     }})
 
     return 1
+
 
 def update_task():
     '''This function is run when the user wants to update a 
@@ -206,6 +209,7 @@ def update_task():
    
     return 1
 
+
 def value_change(attribute):
     '''A function that is used to determine any detail/attribute of a 
     task, that could be determining new details for a new task or 
@@ -239,19 +243,24 @@ def value_change(attribute):
             #Determinging what the value is when the detail is priority
             #by using a integerbox and having a upper and lowerbound 
             #from 1-3.
-
             value = integerbox(f"What is the priority?","Priority", \
                                lowerbound=1, upperbound=3)
             
         elif attribute == "Status":
+            #Determening what the value is when the detail is status by
+            #using a buttonbox and having buttons of a list of all the 
+            #possible statuss a task can have.
             value = buttonbox(f"what is the status?","Assignee",Status_list)
 
-        if not value or not attribute:
-            return 1
-        elif value == '':
+
+        if value == '':
             msgbox("Value needs to be inputed")
+
+        elif not value or not attribute:
+            return 1
    
     return value
+
 
 def search(type):
     '''This task take a type parameter , task or team member, then makes
@@ -287,7 +296,6 @@ def search(type):
     return key, specific_choice, choices
     
 
-
 def find():
     '''This function displays the a specfic key either from the tasks
     or team member dictionary'''
@@ -305,6 +313,7 @@ def find():
     msgbox(message)
 
     return 1
+
 
 def report():
     '''A function that generates the a report of the amount of tasks
@@ -349,10 +358,12 @@ def task_collection():
     msgbox(message)
     return 1
 
+
 def leave():
     '''This is function is used to when the user click the exit button
     to leave/stop running the program in the main menu.'''
     return None
+
 
 options = {
         "New Task":new_task,
