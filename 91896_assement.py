@@ -62,12 +62,7 @@ team_members = {
         "Tasks Assigned":["T5"],
     },
 
-    "No member":{
-        "Name":"none",
-        "Email":"none",
-        "Tasks Assigned":[],
-
-    }
+    
 }
 
 #Constant variables
@@ -114,6 +109,18 @@ def display(type,specific):
 
     return message
 
+def assignee_adjust(attribute,value,task):
+     if attribute == 'Status' and value == 'Completed':
+        assignee = tasks[task]['Assignee']  
+        print("Assignee: ", type(assignee))
+        if assignee != "None":
+            team_members[assignee]["Tasks Assigned"].remove(task)
+            print(team_members[assignee]["Tasks Assigned"])
+            tasks[task]['Assignee'] = "None"
+            
+        else:
+            pass
+
 def new_task():
     ''' This function is run when the user wants to add a new task to 
     the tasks dictionary. It runs through all inputs in a for loop then 
@@ -131,17 +138,20 @@ def new_task():
     #A for loop that runs through all the inputs/details that are needed
     #for the the new task being made and then appends it to the output 
     #list.
-    for i in Input_list:
-        detail = value_change(i)
+    for attribute in Input_list:
+        detail = value_change(attribute)
 
         #A while loop that runs while the detail variable is empty and 
         #asks the user to re-input the empty value.
-        while not detail:
+        while detail == 1:
             return 1
         output.append(detail)
 
+        assignee_adjust(attribute,detail,output[0])
+
     #Updates the tasks dictionary witht the new task using the output 
     #list which has all the details.
+        
     tasks.update({output[0]:{
         "Title":output[1],
         "Description":output[2],
@@ -160,16 +170,26 @@ def update_task():
     the value and then updates that specfic value to the specfic task
     they choose.
     '''
-    #The task the user has picked.
+    #The task the user has picked, this is determined by using the
+    #search function.
     chosen_task = search("Task")
+
+    if chosen_task == 1:
+        return 1
     print(chosen_task)
-    #The value the user wants to change.
+    #The detail/attribute the user wants to change of their choosen 
+    #task.
     detail = buttonbox("What do you want to change?", choices = Input_list)
-    print(detail)
+    
+    if not detail:
+        return 1
         
     #Using the value change function the ask the user what them the new
     #value for the detail they want to change.
     changed_value = value_change(detail)
+     
+    if changed_value == 1:
+        return 1
     print(changed_value)
     #If they click cancel it will go back to the menu and not update the
     #detail.
@@ -179,38 +199,54 @@ def update_task():
     #This updates the chosen detail in the chosen task.
     tasks[chosen_task[0]][detail] = changed_value
 
-    if detail == 'Status' and changed_value == 'Completed':
-        assignee = tasks[chosen_task[0]]['Assignee']  
-        print("Assignee: " + assignee)
-        if assignee is not None:
-            team_members[assignee]["Tasks Assigned"].remove(chosen_task[0])
-            tasks[chosen_task[0]]['Assignee'] == None
-            
-        else:
-            pass
+    #An if statement that checks if the user has changed the status of 
+    #their choosen task and if that choosen task is completed. This to 
+    #see if the task needs to be removed from the assignees task list.
+    assignee_adjust(detail,changed_value,chosen_task[0])
+   
     return 1
 
-def value_change(i):
+def value_change(attribute):
+    '''A function that is used to determine any detail/attribute of a 
+    task, that could be determining new details for a new task or 
+    figuring out what is the new value for a detail being updated.
+
+    keyword arguments:
+    attribute -- the detail being asked to the user for a value
+    '''
     #Makes a list of all possible assigness or the keys of the team
     #member list.
     assignee_list = list(team_members.keys())
+    assignee_list.append("None")
     value = ''
 
-    #A while loop that runs while the value string 
+    #A while loop that runs while the value string is empty.
     while value == '': 
 
-        if i == "Title" or i == "Description":
-            value = enterbox(f"what is the {i}?")
-
-        elif i == "Assignee":
+        #An if statement asks the user for the attribute's value,then
+        #saves it in the value variable 
+        if attribute == "Title" or attribute == "Description":
+            value = enterbox(f"what is the {attribute}?")
+        #This elif statement checks if the attrubute is the Assignee. 
+        #As the assignee attribute uses a buttonbox with it's own 
+        #options list.
+        elif attribute == "Assignee":
+            #Determining what the value is by using a buttonbox to asks 
+            #the user who the asignee is.
             value = buttonbox(f"Who is the assignee?","Assignee",assignee_list)
-        elif i == "Priority":
+
+        elif attribute == "Priority":
+            #Determinging what the value is when the detail is priority
+            #by using a integerbox and having a upper and lowerbound 
+            #from 1-3.
+
             value = integerbox(f"What is the priority?","Priority", \
                                lowerbound=1, upperbound=3)
-        elif i == "Status":
-            value = buttonbox(f"what is the {i}?","Assignee",Status_list)
+            
+        elif attribute == "Status":
+            value = buttonbox(f"what is the status?","Assignee",Status_list)
 
-        if not value or not i:
+        if not value or not attribute:
             return 1
         elif value == '':
             msgbox("Value needs to be inputed")
@@ -235,14 +271,17 @@ def search(type):
     if type == "Task":
         keys = list(tasks.keys())
         for i in tasks:
-            choices.append(tasks[i]["Title"])
+            choices.append(f"{i} - {tasks[i]['Title']}")
 
     elif type == "Team_member":
         keys = list(team_members.keys())
         for i in team_members:
-            choices.append(team_members[i]["Name"])
+            choices.append(f"{team_members[i]['Name']}")
     
     specific_choice = choicebox(f"What {type}?", choices=choices) 
+
+    if not specific_choice:
+        return 1
     key = keys[choices.index(specific_choice)]
 
     return key, specific_choice, choices
@@ -254,7 +293,13 @@ def find():
     or team member dictionary'''
     type = buttonbox("What is the type you want to look into?", \
                      choices  = ["Task","Team_member"])
+    
+    if not type:
+        return 1
     choice = search(type)
+
+    if choice == 1:
+        return choice
 
     message = display(type,choice[0])
     msgbox(message)
@@ -262,7 +307,10 @@ def find():
     return 1
 
 def report():
-    
+    '''A function that generates the a report of the amount of tasks
+    in each status. It runs a messagebox to show report showing the 
+    status and a number representing the amount of tasks on that 
+    status.'''
     message = []
 
     status_bins = {
@@ -291,6 +339,9 @@ def report():
 
 
 def task_collection():
+    '''This function genererates a list of all the tasks and their 
+    details. It displays it in a messsagebox with every task displayed
+    with their details indented underneath every task number.'''
     message = ''
     for i in tasks: 
         message += display("Task",i)
@@ -299,6 +350,8 @@ def task_collection():
     return 1
 
 def leave():
+    '''This is function is used to when the user click the exit button
+    to leave/stop running the program in the main menu.'''
     return None
 
 options = {
