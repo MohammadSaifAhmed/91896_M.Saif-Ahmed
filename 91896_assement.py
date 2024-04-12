@@ -74,7 +74,8 @@ Status_list = ["Not Started","In Progress","Blocked","Completed"]
 Member_details = ["Name","Email","Tasks Assigned"]
 
 def display(type,specific):
-    ''' This function is used to display a task or team members full 
+    ''' 
+    This function is used to display a task or team members full 
     descrition/details. The Function takes in a type parameter which 
     tells the function wheter it needs to display a Task or
     team member and the specific parameter tells the function what task
@@ -135,11 +136,15 @@ def assignee_task_removal(attribute,value,task):
             team_members[assignee]["Tasks Assigned"].remove(task)
 
 
+
+
 def new_task():
-    ''' This function is run when the user wants to add a new task to 
+    '''
+    This function is run when the user wants to add a new task to 
     the tasks dictionary. It runs through all inputs in a for loop then 
     checks if any input is empty and ask for it again until all value 
-    are not empty. ''' 
+    are not empty. 
+    ''' 
     
     #An empty list that all the new task's details get appended to.
     output = []
@@ -182,7 +187,8 @@ def new_task():
 
 
 def update_task():
-    '''This function is run when the user wants to update a 
+    '''
+    This function is run when the user wants to update a 
     pre-existing task. It asks the user first what task then what
     specfic detail they want to change of that the task then asks for 
     the value and then updates that specfic value to the specfic task
@@ -216,8 +222,16 @@ def update_task():
     if not changed_value:
         return 
     
-    #This updates the chosen detail in the chosen task.
-    tasks[chosen_task[0]][attribute] = changed_value
+    #This if statement checks if the status of the chosen task is 
+    #completed and the attribute being changed is the Assignee then
+    #it doesn't change it as the Assignee of a completed task shouldn't
+    #be changed.
+    if tasks[chosen_task[0]]["Status"] == "Completed" and \
+        attribute == "Assignee":
+        return
+    else:
+        #This updates the chosen detail in the chosen task.
+        tasks[chosen_task[0]][attribute] = changed_value
 
     #An if statement that checks if the user has changed the status of 
     #their choosen task and if that choosen task is completed. This to 
@@ -228,7 +242,8 @@ def update_task():
 
 
 def value_change(attribute):
-    '''A function that is used to determine any detail/attribute of a 
+    '''
+    A function that is used to determine any detail/attribute of a 
     task, that could be determining new details for a new task or 
     figuring out what is the new value for a detail being updated.
 
@@ -288,7 +303,8 @@ def value_change(attribute):
 
 
 def search(type):
-    '''This task take a type parameter , task or team member, then makes
+    '''
+    This task take a type parameter , task or team member, then makes
     a list of all the keys of that type then runs a for loop to figure 
     out the the title of the task or the name of the team member then
     outputs a choicebox according the the avaible choices of the type 
@@ -327,7 +343,7 @@ def search(type):
         #dictionary and appends a f string with the key then it's 
         #'Name' attribute to the choices list.
         for name_code in team_members:
-            choices.append(f"{team_members[name_code]['Name']}")
+            choices.append(f"{name_code} - {team_members[name_code]['Name']}")
     
     #A variable that saves the users choice from a choicebox that
     #asks the user what specfic thing they want from a list of all the
@@ -351,8 +367,10 @@ def search(type):
     
 
 def find():
-    '''This function displays the a specfic key either from the tasks
-    or team member dictionary'''
+    '''
+    This function displays the a specfic key either from the tasks
+    or team member dictionary
+    '''
 
     #This variable saves the users choice of what type is the thing you
     #are trying to look for from these two options, Task or Team member,
@@ -384,10 +402,12 @@ def find():
 
 
 def report():
-    '''A function that generates the a report of the amount of tasks
+    '''
+    A function that generates the a report of the amount of tasks
     in each status. It runs a messagebox to show report showing the 
     status and a number representing the amount of tasks on that 
-    status.'''
+    status.
+    '''
 
     #A empty string that the message will be appended to.
     message = []
@@ -431,9 +451,11 @@ def report():
 
 
 def task_collection():
-    '''This function genererates a list of all the tasks and their 
+    '''
+    This function genererates a list of all the tasks and their 
     details. It displays it in a messsagebox with every task displayed
-    with their details indented underneath every task number.'''
+    with their details indented underneath every task number.
+    '''
 
     #A variable for the message to get appended to.
     message = ''
@@ -452,8 +474,10 @@ def task_collection():
 
 
 def leave():
-    '''This is function is used to when the user click the exit button
-    to leave/stop running the program in the main menu.'''
+    '''
+    This is function is used to when the user click the exit button
+    to leave/stop running the program in the main menu.
+    '''
 
     return 'Exit'
 
@@ -465,7 +489,7 @@ options = {
         "Find employee or task":find,
         "Update task":update_task,
         "Generate report":report,
-        "see task collection":task_collection,
+        "See task collection":task_collection,
         "Exit":'',
      
     }
