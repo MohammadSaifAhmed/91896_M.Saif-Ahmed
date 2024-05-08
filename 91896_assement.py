@@ -171,7 +171,11 @@ def new_task():
         #status is completed and if so then remove it from the 
         #assignee's task assigned list.
         assignee_task_removal(attribute,detail,output[0])
-
+    
+    #Updates the team member's task list in the team_member dictionary 
+    #with the task.
+    team_members[output[3]]['Tasks Assigned'].append(output[0])
+            
     #Updates the tasks dictionary witht the new task using the output 
     #list which has all the details of the new task.
     tasks.update({output[0]:{
@@ -182,6 +186,9 @@ def new_task():
         "Status":output[5]
 
     }})
+    
+    
+    
 
     return 
 
